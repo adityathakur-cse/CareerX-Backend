@@ -19,10 +19,11 @@
   },
   "homepage": "https://github.com/adityathakur-cse/CareerX-Backend#readme",
   "dependencies": {
+    "bcrypt": "^6.0.0",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^5.2.0",
     "jsonwebtoken": "^9.0.2",
-    "prisma": "^7.0.1"
+    "mongoose": "^9.0.0"
   }
 }

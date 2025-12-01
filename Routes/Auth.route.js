@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { Register } from "../Controllers/Auth.controller.js";
 
 const authRouter = Router();
 
@@ -7,5 +8,6 @@ authRouter.get("/", (req, res) => {
     message: "Auth Router Working",
   });
 });
+authRouter.post("/register" , Register)
 
 export default authRouter;
