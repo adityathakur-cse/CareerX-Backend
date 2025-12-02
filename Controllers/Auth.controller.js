@@ -41,7 +41,7 @@ export const Register = async (req, res) => {
     });
   }
 };
-  
+
 // Login Controller
 export const Login = async (req, res) => {
   const { email, password } = req.body;
@@ -73,7 +73,8 @@ export const Login = async (req, res) => {
     res
       .cookie("token", token, {
         httpOnly: true,
-        secure: false,
+        secure: true,
+        sameSite: "None",
       })
       .json({
         success: true,
