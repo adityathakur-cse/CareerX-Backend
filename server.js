@@ -9,8 +9,18 @@ dotenv.config();
 
 const app = express();
 
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://careerx-one.vercel.app",
+];
+
+app.use(
+  cors({
+    origin: allowedOrigins, 
+    credentials: true,
+  })
+);
 app.use(express.json());
-app.use(cors());
 app.use(cookieParser());
 
 app.use("/api/auth", authRouter);

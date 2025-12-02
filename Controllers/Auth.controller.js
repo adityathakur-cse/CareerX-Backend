@@ -2,6 +2,7 @@ import User from "../Models/user.model.js";
 import bcrpyt from "bcrypt";
 import jwt from "jsonwebtoken";
 
+// Register Controller
 export const Register = async (req, res) => {
   const { role, fullName, password, email } = req.body;
   try {
@@ -40,7 +41,8 @@ export const Register = async (req, res) => {
     });
   }
 };
-
+  
+// Login Controller
 export const Login = async (req, res) => {
   const { email, password } = req.body;
   try {
