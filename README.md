@@ -9,6 +9,8 @@ Add CareerX at the end of the DATABASE_URL
 PORT=5000
 DATABASE_URL=mongodb+srv://username:cluster/CareerX
 
+CLIENT_SECRET_KEY=SECRETKEY
+
 ```
 
 ## 🔐 Command to RUN
