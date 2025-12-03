@@ -95,3 +95,16 @@ export const Login = async (req, res) => {
     });
   }
 };
+
+//Logout Controller
+export const Logout = async (req, res) => {
+  res.clearCookie("token", {
+    httpOnly: true,
+    secure: true,
+    sameSite: "None",
+  });
+  return res.json({
+    message: "Logged Out Successfully",
+    success: true,
+  });
+};
