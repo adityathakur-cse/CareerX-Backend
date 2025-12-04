@@ -11,6 +11,9 @@ DATABASE_URL=mongodb+srv://username:cluster/CareerX
 
 CLIENT_SECRET_KEY=SECRETKEY
 
+CLOUD_SECRET_KEY=your_secret_key
+CLOUD_API_KEY=your_api_key
+
 ```
 
 ## 🔐 Command to RUN
