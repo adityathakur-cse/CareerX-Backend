@@ -1,11 +1,11 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 
-const userSchema = new mongoose.Schema(
+const companySchema = new mongoose.Schema(
   {
     role: {
       type: String,
-      default: "STUDENT",
+      default: "COMPANY",
     },
     fullName: {
       type: String,
@@ -20,44 +20,41 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    phone: {
+    description: {
       type: String,
     },
-    skills: {
-      type: Array(String),
-    },
-    resumeUrl: {
+    location: {
       type: String,
     },
-    profileImg: {
+    hrName: {
       type: String,
     },
-    Socials: {
-      platform: {
-        type: String,
-      },
-      url: {
-        type: String,
-      },
+    hrEmail: {
+      type: String,
+    },
+    logoUrl: {
+      type: String,
     },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+  }
 );
 
-userSchema.pre("save", async function () {
+companySchema.pre("save", async function () {
   if (!this.isModified("password")) {
     return;
   }
-
   try {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(this.password, salt);
     this.password = hashedPassword;
   } catch (error) {
+    console.log(error);
     throw error;
   }
 });
 
-const User = mongoose.model("User", userSchema);
+const Company = mongoose.model("Company", companySchema);
 
-export default User;
+export default Company;

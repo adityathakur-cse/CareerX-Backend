@@ -1,6 +1,7 @@
 import User from "../Models/user.model.js";
 import bcrpyt from "bcrypt";
 import jwt from "jsonwebtoken";
+import Company from "../Models/company.model.js";
 
 // Register Controller
 export const Register = async (req, res) => {
@@ -13,23 +14,40 @@ export const Register = async (req, res) => {
       });
     }
 
-    const findUser = await User.findOne({ email });
-    if (findUser) {
-      return res.status(404).json({
-        success: false,
-        message: "User already exists. Please Login",
+    if (role === "STUDENT") {
+      const findUser = await User.findOne({ email });
+      if (findUser) {
+        return res.status(404).json({
+          success: false,
+          message: "User already exists. Please Login",
+        });
+      }
+
+      await User.create({
+        fullName,
+        role,
+        password,
+        email,
+      });
+    } else {
+      const findCompany = await Company.findOne({ email });
+      if (findCompany) {
+        return res.status(404).json({
+          success: false,
+          message: "Company already exists. Please Login",
+        });
+      }
+
+      await Company.create({
+        fullName,
+        role,
+        email,
+        password,
       });
     }
 
-    await User.create({
-      fullName,
-      role,
-      password,
-      email,
-    });
-
     return res.status(200).json({
-      message: "User Registed Successfully",
+      message: `${role} Registered Successfully`,
       success: true,
     });
   } catch (error) {
@@ -44,39 +62,32 @@ export const Register = async (req, res) => {
 
 // Login Controller
 export const Login = async (req, res) => {
-  const { email, password } = req.body;
+  const { role, email, password } = req.body;
   try {
-    const findUser = await User.findOne({ email });
-    if (!findUser) {
-      return res.status(404).json({
-        message: "Account doesn't exist",
-        success: false,
-      });
-    }
-
-    const verify = await bcrpyt.compare(password, findUser.password);
-    if (!verify) {
-      return res.status(401).json({
-        message: "Password is incorrect.",
-        success: false,
-      });
-    }
-
-    const token = jwt.sign(
-      { id: findUser._id, role: findUser.role, email: findUser.email },
-      process.env.CLIENT_SECRET_KEY,
-      {
-        expiresIn: "60m",
+    if (role === "STUDENT") {
+      const findUser = await User.findOne({ email });
+      if (!findUser) {
+        return res.status(404).json({
+          message: "Account doesn't exist",
+          success: false,
+        });
       }
-    );
+      const verify = await bcrpyt.compare(password, findUser.password);
+      if (!verify) {
+        return res.status(401).json({
+          message: "Password is incorrect.",
+          success: false,
+        });
+      }
+      const token = jwt.sign(
+        { id: findUser._id, role: findUser.role, email: findUser.email },
+        process.env.CLIENT_SECRET_KEY,
+        {
+          expiresIn: "60m",
+        }
+      );
 
-    res
-      .cookie("token", token, {
-        httpOnly: true,
-        secure: true,
-        sameSite: "None",
-      })
-      .json({
+      return res.cookie("token", token).json({
         success: true,
         message: "User Logged In",
         userInfo: {
@@ -86,6 +97,44 @@ export const Login = async (req, res) => {
           fullName: findUser.fullName,
         },
       });
+    } else {
+      const findCompany = await Company.findOne({ email });
+      if (!findCompany) {
+        return res.status(404).json({
+          message: "Account doesn't exist",
+          success: false,
+        });
+      }
+      const verify = await bcrpyt.compare(password, findCompany.password);
+      if (!verify) {
+        return res.status(401).json({
+          message: "Password is incorrect.",
+          success: false,
+        });
+      }
+      const token = jwt.sign(
+        {
+          id: findCompany._id,
+          role: findCompany.role,
+          email: findCompany.email,
+        },
+        process.env.CLIENT_SECRET_KEY,
+        {
+          expiresIn: "60m",
+        }
+      );
+
+      res.cookie("token", token).json({
+        success: true,
+        message: "Company Logged In",
+        userInfo: {
+          id: findCompany._id,
+          role: findCompany.role,
+          email: findCompany.email,
+          fullName: findCompany.fullName,
+        },
+      });
+    }
   } catch (error) {
     console.log(error);
     return res.status(500).json({
@@ -98,11 +147,7 @@ export const Login = async (req, res) => {
 
 //Logout Controller
 export const Logout = async (req, res) => {
-  res.clearCookie("token", {
-    httpOnly: true,
-    secure: true,
-    sameSite: "None",
-  });
+  res.clearCookie("token");
   return res.json({
     message: "Logged Out Successfully",
     success: true,
