@@ -87,15 +87,12 @@ export const Login = async (req, res) => {
         }
       );
 
+      delete findUser.password;
+
       return res.cookie("token", token).json({
         success: true,
         message: "User Logged In",
-        userInfo: {
-          id: findUser._id,
-          role: findUser.role,
-          email: findUser.email,
-          fullName: findUser.fullName,
-        },
+        userInfo: findUser,
       });
     } else {
       const findCompany = await Company.findOne({ email });
@@ -124,15 +121,12 @@ export const Login = async (req, res) => {
         }
       );
 
+      delete findCompany.password;
+
       res.cookie("token", token).json({
         success: true,
         message: "Company Logged In",
-        userInfo: {
-          id: findCompany._id,
-          role: findCompany.role,
-          email: findCompany.email,
-          fullName: findCompany.fullName,
-        },
+        userInfo: findCompany,
       });
     }
   } catch (error) {

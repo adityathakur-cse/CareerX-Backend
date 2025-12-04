@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import authRouter from "./Routes/Auth.route.js";
 import { connectToDb } from "./Helpers/connectToDb.js";
 import cookieParser from "cookie-parser";
+import companyRouter from "./Routes/Company.route.js";
 
 dotenv.config();
 
@@ -16,7 +17,7 @@ const allowedOrigins = [
 
 app.use(
   cors({
-    origin: allowedOrigins, 
+    origin: allowedOrigins,
     credentials: true,
   })
 );
@@ -24,7 +25,8 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use("/api/auth", authRouter);
-
+app.use("/api/company", companyRouter);
+ 
 const PORT = process.env.PORT;
 
 app.listen(PORT, () => {
