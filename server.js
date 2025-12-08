@@ -6,7 +6,7 @@ import { connectToDb } from "./Helpers/connectToDb.js";
 import cookieParser from "cookie-parser";
 import companyRouter from "./Routes/Company.route.js";
 
-dotenv.config();
+dotenv.config();  
 
 const app = express();
 
