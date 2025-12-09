@@ -22,24 +22,31 @@ const userSchema = new mongoose.Schema(
     },
     phone: {
       type: String,
+      default: "",
     },
     skills: {
-      type: Array(String),
+      type: [String],
     },
     resumeUrl: {
       type: String,
+      default: "",
     },
     profileImg: {
       type: String,
+      default: "",
     },
-    Socials: {
-      platform: {
-        type: String,
+    Socials: [
+      {
+        platform: {
+          type: String,
+          required: true,
+        },
+        url: {
+          type: String,
+          required: true,
+        },
       },
-      url: {
-        type: String,
-      },
-    },
+    ],
   },
   { timestamps: true }
 );
