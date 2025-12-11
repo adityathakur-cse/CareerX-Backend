@@ -1,4 +1,5 @@
 import { ImageUploadUtil, ResumeUploadUtil } from "../Helpers/cloudinary.js";
+import Internship from "../Models/internship.model.js";
 import User from "../Models/user.model.js";
 
 export const uploadProfileImg = async (req, res) => {
@@ -72,4 +73,13 @@ export const profileUpdate = async (req, res) => {
       error,
     });
   }
+};
+
+export const fetchInternships = async (req, res) => {
+  const internships = await Internship.find({});
+  return res.status(200).json({
+    message: "Internships Fetched",
+    success: true,
+    internships,
+  });
 };
